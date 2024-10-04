@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException
 import requests
 import re
 import html
+import json
+
 from app.services.place_service import get_body, content_scrap, scrap_all_content
 
 router = APIRouter()
@@ -10,6 +12,7 @@ router = APIRouter()
 def place(place_name: str):
     place_data = {}
     link = f'https://www.tripniceday.com/place/{place_name}'
+    place_data['link'] = link
     body = get_body(link)
     place_content_pattern = r'<article class="place-content-wrapper">([\s\S]*?)<\/article>'
     place_content_match = re.search(place_content_pattern, body)
@@ -39,7 +42,7 @@ def place(place_name: str):
 
         inner_list_a = r'<a[^>]*>([\s\S]*?)<\/a>'
         for li in tag_list:
-            tag_list.append(content_scrap(li, inner_list_a, 1))
+            tags_list.append(content_scrap(li, inner_list_a, 1))
     place_data['tags'] = tags_list
     
     #image scrap
@@ -53,3 +56,4 @@ def place(place_name: str):
         place_data['image'] = imgSrc
     else:
         place_data['image'] = None
+    return place_data
