@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
   chromium \
   && rm -rf /var/lib/apt/lists/*
 
-ENV CHROMEDRIVER_VERSION=114.0.5735.90
+ENV CHROMEDRIVER_VERSION=129.0.6668.89
 
 
 RUN wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
