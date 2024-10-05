@@ -23,7 +23,8 @@ def get_body(url):
 
     driver = None
     try:    
-        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+        service = ChromeService("/usr/local/bin/chromedriver")
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
         
         # Wait for page load
