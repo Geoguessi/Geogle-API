@@ -26,6 +26,8 @@ def get_body(url):
         service = ChromeService("/usr/local/bin/chromedriver")
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
+        print(driver.title)
+
         
         # Wait for page load
         delay = 1 * 60  # seconds
