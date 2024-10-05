@@ -1,5 +1,7 @@
 FROM python:3.12 AS base
 
+
+
 RUN apt-get update && apt-get install -y \
   libglib2.0-0 \
   libnss3 \
@@ -12,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 ENV CHROMEDRIVER_VERSION=129.0.6668.89
 
+RUN apt-get install -y google-chrome-stable
 RUN wget -N https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip && \
   unzip -o chromedriver-linux64.zip -d /usr/local/bin/ && \
   mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
