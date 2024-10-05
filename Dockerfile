@@ -16,15 +16,29 @@ RUN apt-get update && apt-get install -y \
   libxcursor1 \
   libxtst6 \
   libxrandr2 \
+  libatk1.0-0 \
+  libcups2 \
+  libdbus-glib-1-2 \
+  libgtk-3-0 \
+  libx11-dev \
+  libgdk-pixbuf2.0-0 \
+  libpango1.0-0 \
+  libpangocairo-1.0-0 \
+  libasound2 \
+  fonts-liberation \
+  libappindicator3-1 \
+  libxshmfence1 \
   chromium \
   && rm -rf /var/lib/apt/lists/*
 
-RUN CHROMEDRIVER_VERSION=curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE && \
+RUN CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
   wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
   unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
   chmod +x /usr/local/bin/chromedriver && \
   rm chromedriver_linux64.zip
 
+# Set up the display environment
+ENV DISPLAY=:99
 
 WORKDIR /usr/api
 
