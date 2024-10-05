@@ -34,9 +34,10 @@ RUN apt-get update && apt-get install -y \
 ENV CHROMEDRIVER_VERSION=129.0.6668.89
 
 RUN wget -N https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip && \
-  unzip chromedriver-linux64.zip -d /usr/local/bin/ && \
+  unzip -o chromedriver-linux64.zip -d /usr/local/bin/ && \
+  mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
   chmod +x /usr/local/bin/chromedriver && \
-  rm chromedriver-linux64.zip
+  rm -rf chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
 
 ENV DISPLAY=:99
 
