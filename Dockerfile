@@ -31,13 +31,14 @@ RUN apt-get update && apt-get install -y \
   chromium \
   && rm -rf /var/lib/apt/lists/*
 
-RUN CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-  wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
+ENV CHROMIUM_VERSION=129.0.6668.89  
+ENV CHROMEDRIVER_VERSION=129.0.0  
+
+RUN wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
   unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
   chmod +x /usr/local/bin/chromedriver && \
   rm chromedriver_linux64.zip
 
-# Set up the display environment
 ENV DISPLAY=:99
 
 WORKDIR /usr/api
