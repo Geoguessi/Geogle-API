@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS base
+FROM python:3.12 AS base
 
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
