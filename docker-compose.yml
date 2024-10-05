@@ -1,0 +1,9 @@
+services:
+  api:
+    container_name: geogle-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3001:3001
