@@ -26,6 +26,7 @@ def get_body(url):
     driver = None
     try:    
         service = ChromeService("/usr/bin/chromedriver")
+        service.start()
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
         print(driver.title)
