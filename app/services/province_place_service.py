@@ -3,37 +3,47 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 
 import re
 import time
 
 def get_body(url):
-    driver = webdriver.ChromiumEdge()
-
-    driver.get(url)
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    options = webdriver.ChromeOptions()
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless=old')
     
-    #waiting for page load
-    delay = 1 * 60 # seconds
+    driver = None
     try:
-        WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'footer')))
-        time.sleep(3)
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-    except TimeoutException:
-        driver.close()
-        return ""
+        driver = webdriver.ChromiumEdge(options=options)
+        driver.get(url)
+        
+        # Wait for page load
+        delay = 1 * 60  # seconds
+        try:
+            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'footer')))
+            time.sleep(3)  
+        except TimeoutException:
+            raise HTTPException(status_code=408, detail="Page did not load in time.")
+        except WebDriverException as e:
+            raise HTTPException(status_code=500, detail=f"WebDriverException: {str(e)}")
 
+        content = driver.page_source
+        
+        pattern = r'<body[^>]*>(.*?)</body>'
+        match = re.search(pattern, content, re.DOTALL)
+        
+        if match:
+            return match.group(1)
+        else:
+            raise HTTPException(status_code=404, detail="Body content not found.")
 
-    content = driver.page_source
-    driver.close()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
     
-    pattern = r'<body[^>]*>(.*?)</body>'
-    match = re.search(pattern, content, re.DOTALL)
-
-    
-    return match.group(1)
+    finally:
+        if driver:
+            driver.quit()
 
 def get_container(text):
     container_pattern = r'<section class="Province_province-places-block[^"]*"[^>]*>([\s\S]*?)<\/section>'

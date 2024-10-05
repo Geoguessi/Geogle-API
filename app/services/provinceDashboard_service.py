@@ -50,6 +50,7 @@ def get_foodie_detail(text: str, *args, **kwargs):
     link_pattern = r'<a[^>]*href="(\/[^"]*?)"'
     title_pattern = r'<a[^>]*title="([^"]*?)"'
     image_pattern = r'<noscript>.*?<img[^>]*src="([^"]*)"[^>]*>'
+    
 
     detail_container_match = re.search(detail_container_pattern, text)
 
