@@ -14,22 +14,21 @@ import re
 import time
 
 def get_body(url):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage") 
+    options = webdriver.ChromeOptions()
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless=old')
     
-
     driver = None
-    try:    
-        service = ChromeService("/usr/local/bin/chromedriver")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+    try:
+        driver = webdriver.ChromiumEdge(options=options)
         driver.get(url)
         
         # Wait for page load
         delay = 1 * 60  # seconds
         try:
-            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'footer')))
+            WebDriverWait(driver, delay).until(
+                lambda driver: driver.execute_script("return document.readyState") == "complete"
+            )
             time.sleep(3)  
         except TimeoutException:
             raise HTTPException(status_code=408, detail="Page did not load in time.")
