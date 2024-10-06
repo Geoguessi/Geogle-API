@@ -36,6 +36,8 @@ def get_body(url):
             raise HTTPException(status_code=500, detail=f"WebDriverException: {str(e)}")
 
         content = driver.page_source
+
+        logging.info(f"Content: {content}")
         
         pattern = r'<body[^>]*>(.*?)</body>'
         match = re.search(pattern, content, re.DOTALL)
