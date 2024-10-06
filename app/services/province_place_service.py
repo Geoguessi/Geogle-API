@@ -25,7 +25,7 @@ def get_body(url):
         logging.info(f"Navigated to {url} with title: {driver.title}")
 
         # Wait for page load
-        delay = 1 * 60  # seconds
+        delay = 2 * 60  # seconds
         try:
             WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.TAG_NAME, 'body')))
             logging.info("Page loaded successfully.")
