@@ -1,22 +1,4 @@
-FROM ubuntu:22.04
-
 FROM python:3.12
-
-RUN apt-get update
-
-RUN apt install unzip
-
-COPY chrome_114_amd64.deb ./
-
-RUN apt install ./chrome_114_amd64.deb -y
-
-RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-
-RUN unzip chromedriver_linux64.zip
-
-RUN mv chromedriver /usr/bin/chromedriver
-
-RUN google-chrome --version
 
 WORKDIR /app
 
