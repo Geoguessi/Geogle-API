@@ -1,12 +1,4 @@
 services:
-  selenium:
-    image: selenium/standalone-chrome
-    ports:
-      - "4444:4444"
-      - "7900:7900" 
-    networks:
-      - app-network  
-
   api:
     container_name: geogle-api
     build:
@@ -15,11 +7,3 @@ services:
     restart: always
     ports:
       - "3001:3001"
-    volumes:
-      - .:/app 
-    networks:
-      - app-network  
-
-networks:
-  app-network:
-    driver: bridge  

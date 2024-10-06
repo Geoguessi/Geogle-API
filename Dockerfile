@@ -1,10 +1,24 @@
-FROM python:3.12
+FROM python:3.12-slim
+
+ENV PYTHONUNBUFFERED=1
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROMEDRIVER_BIN=/usr/bin/chromedriver
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
+RUN apt-get update && apt-get install -y \
+  chromium-driver \
+  chromium \
+  curl \
+  wget \
+  xvfb \
+  fonts-liberation \
+  libappindicator3-1 \
+  libnss3 \
+  libxss1 \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
 
 COPY ./app /app/app

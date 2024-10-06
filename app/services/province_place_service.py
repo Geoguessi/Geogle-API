@@ -13,14 +13,17 @@ import logging
 
 def get_body(url):
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--headless")  
+    chrome_options.binary_location = "/usr/bin/chromium"  
+    chrome_options.add_argument("--no-sandbox")  
+    chrome_options.add_argument("--disable-dev-shm-usage") 
+    chrome_options.add_argument("--disable-gpu")  
+    chrome_options.add_argument("--disable-extensions")
 
     driver = None
     try:    
-        remote_url = 'http://selenium:4444/wd/hub'
-        driver = webdriver.Remote(command_executor=remote_url, options=chrome_options)
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
         logging.info(f"Navigated to {url} with title: {driver.title}")
 
