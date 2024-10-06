@@ -1,33 +1,29 @@
-FROM python:3.12 AS base
+FROM ubuntu:22.04
 
+FROM python:3.8
 
+RUN apt-get update
 
-RUN apt-get update && apt-get install -y \
-  libglib2.0-0 \
-  libnss3 \
-  libgconf-2-4 \
-  libfontconfig1 \
-  chromium-driver \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt install unzip
 
+COPY chrome_114_amd64.deb ./
 
-ENV CHROMEDRIVER_VERSION=129.0.6668.89
+RUN apt install ./chrome_114_amd64.deb -y
 
-RUN wget -N https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip && \
-  unzip -o chromedriver-linux64.zip -d /usr/local/bin/ && \
-  mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-  chmod +x /usr/local/bin/chromedriver && \
-  rm -rf chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
+RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
 
+RUN unzip chromedriver_linux64.zip
 
-WORKDIR /usr/api
+RUN mv chromedriver /usr/bin/chromedriver
 
-COPY ./requirements.txt /usr/api/requirements.txt
+RUN google-chrome --version
 
-RUN pip install --upgrade pip 
-RUN pip install -r /usr/api/requirements.txt 
+WORKDIR /app
 
-COPY ./app /usr/api/app
+COPY requirements.txt /app/requirements.txt
+
+RUN pip install -r /app/requirements.txt
+
+COPY ./app /app/app
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3001"]
