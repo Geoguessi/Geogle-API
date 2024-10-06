@@ -21,8 +21,8 @@ def get_body(url):
 
     driver = None
     try:    
-        driverPath = "/usr/bin/chromedriver"
-        driver = webdriver.Chrome(driverPath, chrome_options=chrome_options)
+        remote_url = 'http://selenium:4444/wd/hub'
+        driver = webdriver.Remote(command_executor=remote_url, options=chrome_options)
         driver.get(url)
         print(driver.title)
 
