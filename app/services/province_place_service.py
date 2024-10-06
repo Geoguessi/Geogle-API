@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -22,13 +22,14 @@ def get_body(url):
 
     driver = None
     try:    
+        chromedriver_path = "/usr/bin/chromedriver"
         service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
         logging.info(f"Navigated to {url} with title: {driver.title}")
 
         # Wait for page load
-        delay = 2 * 60  # seconds
+        delay = 1 * 60  # seconds
         try:
             WebDriverWait(driver, delay).until(
                 lambda driver: driver.execute_script("return document.readyState") == "complete"
