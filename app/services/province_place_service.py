@@ -9,22 +9,26 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.chrome.options import Options  
 import re
 import time
-
-import re
-import time
+import logging
 
 def get_body(url):
-    options = webdriver.ChromeOptions()
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless=old')
-    
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  
+    chrome_options.binary_location = "/usr/bin/chromium"  
+    chrome_options.add_argument("--no-sandbox")  
+    chrome_options.add_argument("--disable-dev-shm-usage") 
+    chrome_options.add_argument("--disable-gpu")  
+    chrome_options.add_argument("--disable-extensions")
+
     driver = None
-    try:
-        driver = webdriver.ChromiumEdge(options=options)
+    try:    
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get(url)
-        
+        logging.info(f"Navigated to {url} with title: {driver.title}")
+
         # Wait for page load
-        delay = 1 * 60  # seconds
+        delay = 2 * 60  # seconds
         try:
             WebDriverWait(driver, delay).until(
                 lambda driver: driver.execute_script("return document.readyState") == "complete"
@@ -36,6 +40,8 @@ def get_body(url):
             raise HTTPException(status_code=500, detail=f"WebDriverException: {str(e)}")
 
         content = driver.page_source
+
+        logging.info(f"Content: {content}")
         
         pattern = r'<body[^>]*>(.*?)</body>'
         match = re.search(pattern, content, re.DOTALL)
