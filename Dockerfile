@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-FROM python:3.8
+FROM python:3.12
 
 RUN apt-get update
 
