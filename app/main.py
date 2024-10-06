@@ -15,7 +15,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000", 
-    "https://geogle.kitton.dev/", 
+    "https://geogle.kitton.dev", 
 ]
 
 app.add_middleware(
