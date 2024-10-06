@@ -9,9 +9,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.chrome.options import Options  
 import re
 import time
-
-import re
-import time
+import logging
 
 def get_body(url):
     chrome_options = Options()
@@ -24,13 +22,13 @@ def get_body(url):
         remote_url = 'http://selenium:4444/wd/hub'
         driver = webdriver.Remote(command_executor=remote_url, options=chrome_options)
         driver.get(url)
-        print(driver.title)
+        logging.info(f"Navigated to {url} with title: {driver.title}")
 
-        
         # Wait for page load
         delay = 1 * 60  # seconds
         try:
-            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'footer')))
+            WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.TAG_NAME, 'body')))
+            logging.info("Page loaded successfully.")
             time.sleep(3)  
         except TimeoutException:
             raise HTTPException(status_code=408, detail="Page did not load in time.")
