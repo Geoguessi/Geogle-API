@@ -27,7 +27,7 @@ def get_body(url):
         # Wait for page load
         delay = 2 * 60  # seconds
         try:
-            WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.TAG_NAME, 'body')))
+            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'footer')))
             logging.info("Page loaded successfully.")
             time.sleep(3)  
         except TimeoutException:
