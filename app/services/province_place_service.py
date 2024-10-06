@@ -17,19 +17,12 @@ def get_body(url):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-browser-side-navigation")
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("start-maximized")
-    chrome_options.add_argument("enable-automation")
-
-    
 
     driver = None
     try:    
-        service = ChromeService("/usr/local/bin/chromedriver")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driverPath = "/usr/bin/chromedriver"
+        driver = webdriver.Chrome(driverPath, chrome_options=chrome_options)
         driver.get(url)
         print(driver.title)
 
