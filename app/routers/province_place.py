@@ -13,6 +13,7 @@ router = APIRouter()
 
 @router.get("/province/{province}/places")
 def province_places(province: str):
+    province = province.replace(' ', '-').lower()
     first_page = get_body(f'https://www.tripniceday.com/province/{province}/places?page=1')
     container = get_container(first_page)
     place_amount_pattern = r'<p class="Province_count-text[^"]*"[^>]*>([\s\S]*?)<strong>([\s\S]*?)<\/strong>([\s\S]*?)<\/p>'
